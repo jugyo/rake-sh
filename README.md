@@ -8,10 +8,17 @@ Install
 
     gem install rake-sh
 
-Usage
+Launch
 ----
 
     rake-sh
+
+or specify eager tasks:
+
+    rake-sh environment
+
+Usage
+----
 
 Invoke a rake taks:
 
