@@ -6,9 +6,11 @@ require 'rake/sh/commands'
 module Rake
   module Sh
     class << self
-      def start
+      def start(eager_tasks = [])
         rake_init
+        eager_tasks.each { |task| invoke(task) }
         setup_readline
+
         while buf = Readline.readline("rake> ", true)
           line = buf.strip
           next if line.empty?
