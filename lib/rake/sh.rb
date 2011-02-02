@@ -51,7 +51,9 @@ module Rake
       end
 
       def invoke(name)
+        start = Time.now
         Process.waitpid(fork { ::Rake.application[name].invoke })
+        puts "\e[34m#{Time.now - start}sec\e[0m"
       end
     end
   end
