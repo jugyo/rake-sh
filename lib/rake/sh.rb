@@ -8,7 +8,7 @@ module Rake
     class << self
       def start(eager_tasks = [])
         rake_init
-        eager_tasks.each { |task| invoke(task) }
+        eager_tasks.each { |task| ::Rake.application[task].invoke }
         setup_readline
 
         while buf = Readline.readline("rake> ", true)
