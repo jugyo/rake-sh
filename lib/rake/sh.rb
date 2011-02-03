@@ -8,7 +8,7 @@ module Rake
     class << self
       def start(eager_tasks = [])
         rake_init
-        eager_tasks.each { |task| ::Rake.application[task].invoke }
+        eager_tasks.each { |task| invoke_eager_tasks(task) }
         setup_readline
 
         while buf = Readline.readline("rake> ", true)
@@ -48,6 +48,12 @@ module Rake
         Rake.application = Rake::Application.new
         Rake.application.init
         Rake.application.load_rakefile
+      end
+
+      def invoke_eager_tasks(name)
+        Rake.application[name].invoke
+        puts "\e[44mInvoke task eagerly: `#{name}`\e[0m"
+      rescue
       end
 
       def invoke(line)
