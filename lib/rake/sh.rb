@@ -1,5 +1,6 @@
 require 'readline'
 require 'rake'
+require 'stringio'
 require 'rake/sh/command'
 require 'rake/sh/commands'
 
@@ -45,9 +46,12 @@ module Rake
       end
 
       def rake_init
+        $stdout = StringIO.new
         Rake.application = Rake::Application.new
         Rake.application.init
         Rake.application.load_rakefile
+      ensure
+        $stdout = STDOUT
       end
 
       def invoke_eager_tasks(name)
