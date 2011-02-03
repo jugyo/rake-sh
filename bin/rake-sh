@@ -24,4 +24,6 @@ else
   end
 end
 
+puts "\e[31m" + File.read(File.expand_path('../../BANNER', __FILE__)) + " v#{version}\e[0m\n\n"
+
 Rake::Sh.start(eager_tasks)
