@@ -50,9 +50,20 @@ module Rake
         Rake.application.load_rakefile
       end
 
-      def invoke(name)
+      def invoke(line)
         start = Time.now
-        Process.waitpid(fork { ::Rake.application[name].invoke })
+
+        name, *args = line.split(/\s+/)
+        pid = fork do
+          args.each do |arg|
+            env, value = arg.split('=')
+            next unless env && !env.empty? && value && !value.empty?
+            ENV[env] = value
+          end
+          Rake.application[name].invoke
+        end
+        Process.waitpid(pid)
+
         puts "\e[34m#{Time.now - start}sec\e[0m"
       end
     end
