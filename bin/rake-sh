@@ -1,5 +1,27 @@
 #!/usr/bin/env ruby
 
 $:.unshift File.expand_path('../../lib', __FILE__)
+require 'optparse'
 require 'rake/sh'
-Rake::Sh.start(ARGV)
+
+version = File.read(File.expand_path('../../VERSION', __FILE__))
+no_eager_tasks = false
+
+opt = OptionParser.new
+opt.banner = "Usage: #{opt.program_name} [options] [eager_tasks]\n" +
+              "(By default, the task named 'environment' will be invoked eagerly.)"
+opt.version = version
+opt.on('-n', '--no-eager-task', 'specify no eager task') { no_eager_tasks = true }
+opt.parse!(ARGV)
+
+if no_eager_tasks
+  eager_tasks = []
+else
+  if ARGV.empty?
+    eager_tasks = ['environment']
+  else
+    eager_tasks = ARGV
+  end
+end
+
+Rake::Sh.start(eager_tasks)
